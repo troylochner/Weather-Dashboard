@@ -18,6 +18,8 @@ function getWeatherByCity(cityName, stateabbr, countryCode) {
        return response;
 
     });
+   return response;
+
 }
 
 //GET BY ZIP
@@ -33,6 +35,8 @@ function getWeatherByZip(zipcode) {
 
         
     });
+            return response;
+
 
 }
 
@@ -56,4 +60,6 @@ function getWeatherForecast(lon, lat) {
        //console.log(response);
         return response;
     })
+            return response;
+
 };
