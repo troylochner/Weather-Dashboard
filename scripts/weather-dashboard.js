@@ -1,11 +1,16 @@
-//DECLARE SOME GLOBALS
-var appKey = "cba8b3aa91299eea7b191d7cd713c4d5"
+
+
+//ICON REF : https://openweathermap.org/weather-conditions#How-to-get-icon-URL
+//WEATHER API GLOBALS
+var appKey = "&appid=a3aba25faf7e59594281cfb0824ca1d7"
 var apiURL = "https://api.openweathermap.org/data/2.5/weather?"
 
+//WEATHER API FUNCTIONS
+//GET BY CITY
 function getWeatherByCity(cityName, stateabbr, countryCode) {
 
     var settings = {
-        "url": apiURL + "q=" +cityName +',' +stateabbr +',' +countryCode + '&appid=' + appKey ,
+        "url": apiURL + "q=" +cityName +',' +stateabbr +',' +countryCode + appKey ,
         "method": "GET",
         "timeout": 0,
     };
@@ -15,9 +20,10 @@ function getWeatherByCity(cityName, stateabbr, countryCode) {
     });
 }
 
+//GET BY ZIP
 function getWeatherByZip(zipcode){
     var settings = {
-        "url": apiURL + "zip=" + zipcode + '&appid=' + appKey ,
+        "url": apiURL + "zip=" + zipcode + appKey ,
         "method": "GET",
         "timeout": 0,
     };
