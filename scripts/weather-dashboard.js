@@ -14,7 +14,9 @@ function getWeatherByCity(cityName, stateabbr, countryCode) {
     };
 
     $.ajax(settings).done(function (response) {
-        console.log(response);
+        //console.log(response);
+       return response;
+
     });
 }
 
@@ -26,7 +28,10 @@ function getWeatherByZip(zipcode) {
         "timeout": 0,
     };
     $.ajax(settings).done(function (response) {
-        console.log(response);
+        //console.log(response);
+       return response;
+
+        
     });
 
 }
@@ -48,6 +53,7 @@ function getWeatherForecast(lon, lat) {
     };
 
     $.ajax(settings).done(function (response) {
-        console.log(response);
+       //console.log(response);
+        return response;
     })
 };
