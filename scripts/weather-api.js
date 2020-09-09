@@ -6,17 +6,17 @@ var myweather;
 
 //WEATHER API FUNCTIONS
 //GET BY CITY
-function getWeatherByCity(cityName, stateabbr, countryCode) {
+function getWeatherByCity(cityInput) {
 
     var settings = {
-        "url": apiURL + "q=" + cityName + ',' + stateabbr + ',' + countryCode + appKey,
+        "url": apiURL + "q=" + cityInput + appKey,
         "method": "GET",
         "timeout": 0,
     };
     $.ajax(settings).done(function (response) {
-        console.log(response);
-        myweather = response;
-        //retur response;
+        //console.log(response);
+        //myweather = response;
+        return myweather;
     });
 
 }
@@ -54,3 +54,6 @@ function getWeatherForecast(lon, lat) {
         //return response;
     })
 };
+
+
+//Parse result
