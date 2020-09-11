@@ -2,7 +2,11 @@
 //WEATHER API GLOBALS
 var appKey = "&appid=a3aba25faf7e59594281cfb0824ca1d7"
 var apiURL = "https://api.openweathermap.org/data/2.5/weather?"
-var myweather;
+
+//These may be a problem if left in this file?
+var myWeather;
+var myForecast;
+
 
 //WEATHER API FUNCTIONS
 //GET BY CITY
@@ -12,11 +16,17 @@ function getWeatherByCity(cityInput) {
         "url": apiURL + "q=" + cityInput + appKey,
         "method": "GET",
         "timeout": 0,
+        success: function (data) {
+            myWeather = data;
+            console.log("getWeatherByCity -> myWeather", myWeather)
+             
+        },
+        error: function (ex) {
+            alert(ex.data);
+        }
     };
     $.ajax(settings).done(function (response) {
-        //console.log(response);
-        //myweather = response;
-        return myweather;
+
     });
 
 }
@@ -27,10 +37,17 @@ function getWeatherByZip(zipcode) {
         "url": apiURL + "zip=" + zipcode + appKey,
         "method": "GET",
         "timeout": 0,
+        //Placed this into to code to get the variabout out of async response. 
+        success: function (data) {
+            myWeather = data;
+            console.log("getWeatherByZip -> myWeather", myWeather)
+             
+        },
+        error: function (ex) {
+            alert(ex.data);
+        }
     };
-    $.ajax(settings).done(function (response) {
-        console.log(response);
-        myweather = response;
+    $.ajax(settings).done(function (response) {    
     });
 
 }
@@ -47,13 +64,27 @@ function getWeatherForecast(lon, lat) {
         "url": apiURL + lon + lat + exclude + appKey,
         "method": "GET",
         "timeout": 0,
+        success: function (data) {
+            myForecast = data;
+            console.log("getWeatherForecast -> myForecast", myForecast)
+        },
+        error: function (ex) {
+            alert(ex.data);
+        }
     };
     $.ajax(settings).done(function (response) {
-        console.log(response);
-        myweather = response;
-        //return response;
     })
 };
+
+
+//GET LAT LONG FROM MY WEATHER
+function getForecast(myWeather) {
+ var lat = myWeather.coord.lat;
+ var lon = myWeather.coord.lon;;
+ var myForecast = getWeatherForecast(lon,lat);;
+ console.log("getForecast -> myForecast", myForecast);
+ return myForecast;
+}
 
 
 //Parse result

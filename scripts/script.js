@@ -2,15 +2,17 @@
 //load anything stored in the local storage.
 //when document is ready - the user can do things. 
 
-
 $(document).ready(function(){
     //SAVE DATA
     $("#btnSearchCity").on("click", function () {
         event.preventDefault()
         var cityName = $("#cityInput").val();
-        var myResult=getWeatherByCity(cityName);
-        console.log(myResult);
-        var row = $("<div>").css("width", "100%").text(myResult)
+        
+        console.log(cityName)
+        
+        getWeatherByCity(cityName); 
+        //console.log(myResult);
+        var row = $("<div>").css("width", "100%").text('Weather for ' + cityName.toUpperCase() + myWeather);
         //row.JSONParse(myResult);
         $('#maincontent').append(row);
 
