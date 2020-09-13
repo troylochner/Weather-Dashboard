@@ -23,9 +23,35 @@ $(document).ready(function () {
     $("#btnSearchCity").on("click", function () {
         event.preventDefault();
         var cityName = $("#cityInput").val();
+        $("#cityInput").val('');
+
+        getWeatherByCity(cityName);
+
+        //Add to a recent items list
         console.log(cityName)
 
     })
+
+    function getWeatherByCity(cityInput) {
+
+        var settings = {
+            "url": apiURL + "q=" + cityInput + appKey,
+            "method": "GET",
+            "timeout": 0,
+            success: function (data) {
+                myWeather = data;
+                console.log("getWeatherByCity -> myWeather", myWeather)
+    
+            },
+            error: function (ex) {
+                alert(ex.data);
+            }
+        };
+        $.ajax(settings).done(function (response) {
+    
+        });
+    
+    }
 
 
 
@@ -38,26 +64,7 @@ $(document).ready(function () {
 //WEATHER API FUNCTIONS
 //ICON REF : https://openweathermap.org/weather-conditions#How-to-get-icon-URL
 
-function getWeatherByCity(cityInput) {
 
-    var settings = {
-        "url": apiURL + "q=" + cityInput + appKey,
-        "method": "GET",
-        "timeout": 0,
-        success: function (data) {
-            myWeather = data;
-            console.log("getWeatherByCity -> myWeather", myWeather)
-
-        },
-        error: function (ex) {
-            alert(ex.data);
-        }
-    };
-    $.ajax(settings).done(function (response) {
-
-    });
-
-}
 
 //GET BY ZIP
 function getWeatherByZip(zipcode) {
