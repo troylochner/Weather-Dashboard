@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+    console.log("Doc Ready")
+
     //PLACING API KEY AND URL AT THE TOP
     var appKey = "&appid=a3aba25faf7e59594281cfb0824ca1d7";
     var apiURL = "https://api.openweathermap.org/data/2.5/weather?";
@@ -9,31 +11,28 @@ $(document).ready(function () {
     var myForecast;
 
     //DECLARE DOCUMENT ELEMENT VARIABLES RIGHT HERE
+    var currentCityHeaderEl = $('#cityHeader');
+    var currentCityTempEl = $("#cityTemp");
+    var currentCityUVEl = $("#cityUV");
+    var currentCityWindEl= $("#cityWind"); 
+    var currentCityHumidEl= $("#cityHumid") ; 
 
     //DEFINE SOME FUNCTIONS:
 
-    function loadPrevSearches();
 
-
-    //SAVE DATA
     $("#btnSearchCity").on("click", function () {
-        event.preventDefault()
+        event.preventDefault();
         var cityName = $("#cityInput").val();
-
         console.log(cityName)
-
-        getWeatherByCity(cityName);
-        //console.log(myResult);
-        var row = $("<div>").css("width", "100%").text('Weather for ' + cityName.toUpperCase() + myWeather);
-        //row.JSONParse(myResult);
-        $('#maincontent').append(row);
-
 
     })
 
-});
 
-function displayForecast();
+
+}); //CLOSING FOR DOC READY
+
+//function loadPrevSearches();
+//function displayForecast();
 
 
 //WEATHER API FUNCTIONS
