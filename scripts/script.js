@@ -34,13 +34,32 @@ $(document).ready(function () {
 
     function getWeatherByCity(cityInput) {
 
+        var cityName;
+        var cityTemp;
+        var cityHumid;
+        var cityUV;
+        var cityWindSpeed;
+        var cityWindDirection ; 
+
         var settings = {
-            "url": apiURL + "q=" + cityInput + appKey,
+            "url": apiURL + "q=" + cityInput + appKey + '&units=imperial' ,
             "method": "GET",
             "timeout": 0,
             success: function (data) {
                 myWeather = data;
-                console.log("getWeatherByCity -> myWeather", myWeather)
+                cityName = data.name;
+                console.log("getWeatherByCity -> cityName", cityName)
+                cityTemp = data.main.temp ;
+                console.log("getWeatherByCity -> cityTemp", cityTemp)
+                cityHumid = data.main.humidity ; 
+                console.log("getWeatherByCity -> cityHumid", cityHumid)
+                //cityUV = data.  ;
+                cityWindSpeed =data.wind.speed ; 
+                console.log("getWeatherByCity -> cityWindSpeed", cityWindSpeed)
+                cityWindDirection= data.wind.deg
+                console.log("getWeatherByCity -> cityWindDirection", cityWindDirection)
+                         
+                //console.log("getWeatherByCity -> myWeather", myWeather)
     
             },
             error: function (ex) {
@@ -68,6 +87,11 @@ $(document).ready(function () {
 
 //GET BY ZIP
 function getWeatherByZip(zipcode) {
+
+    var countryCode ; 
+    var tempInK
+
+
     var settings = {
         "url": apiURL + "zip=" + zipcode + appKey,
         "method": "GET",
