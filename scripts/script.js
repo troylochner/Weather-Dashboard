@@ -84,7 +84,9 @@ $(document).ready(function () {
     function getForecast(lat,lon){
         var forecast ; 
         var settings = {
-            "url": apiURL + "onecall/" + '&units=imperial' + appKey  ,
+            //https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={YOUR API KEY}
+
+            "url": apiURL + "onecall?" +  "lat=" + lat + "&lon=" + lon  + appKey  ,
             "method": "GET",
             "timeout": 0,
             success: function (data) {
