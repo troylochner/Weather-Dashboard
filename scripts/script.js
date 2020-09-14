@@ -19,22 +19,36 @@ $(document).ready(function () {
     var currentCityHumidEl= $("#cityHumid") ; 
 
     //DEFINE SOME FUNCTIONS:
-
-
-    $("#btnSearchCity").on("click", function () {
-        event.preventDefault();
-        var cityName = $("#cityInput").val();
-        $("#cityInput").val('');
-
-        getWeatherByCity(cityName);
-
-        //Add to a recent items list
-        console.log(cityName)
-
-    })
-
+   
     function getWeatherByCity(cityInput) {
+        var cityID ;
+        var lat ;
+        var lon ; 
 
+        var settings = {
+            "url": apiURL + "weather?q=" + cityInput + appKey + '&units=imperial',
+            "method": "GET",
+            "timeout": 0,
+            success: function (data) {
+                cityID = data.id;
+                //lat = data.coord.lat;
+                //lon = data.coord.lon;
+
+                getWeatherByID(cityID);
+                //getForecast(lat,lon);
+                //getUVForecast(lat,lon);
+                
+            },
+            error: function (ex) {
+                alert(ex.data);
+            }
+        };
+        $.ajax(settings).done(function (response) {
+            console.log("getWeatherByCity -> myWeather", myWeather)
+        });
+    };
+
+    function getWeatherByID(cityID){
         var cityName;
         var cityTemp;
         var cityHumid;
@@ -46,7 +60,7 @@ $(document).ready(function () {
         var lon ; 
 
         var settings = {
-            "url": apiURL + "weather?q=" + cityInput + appKey + '&units=imperial',
+            "url": apiURL + "weather?id=" + cityID + appKey + '&units=imperial',
             "method": "GET",
             "timeout": 0,
             success: function (data) {
@@ -67,10 +81,9 @@ $(document).ready(function () {
                 lat = data.coord.lat;
                 lon = data.coord.lon;
 
-
                 getForecast(lat,lon);
+                getUVForecast(lat,lon);
                 
-
             },
             error: function (ex) {
                 alert(ex.data);
@@ -102,6 +115,50 @@ $(document).ready(function () {
         });
     };
 
+    function getUVForecast(lat,lon){
+        //var uviforecast ; 
+        var settings = {
+            "url": apiURL + "uvi/forecast?" +  "lat=" + lat + "&lon=" + lon  + appKey  ,
+            "method": "GET",
+            "timeout": 0,
+            success: function (data) {
+                uviForecast = data;             
+                console.log("getForecast -> theForecast", uviForecast)
+            },
+            error: function (ex) {
+                alert(ex.data);
+            }
+        };
+        $.ajax(settings).done(function (response) {
+            
+        });
+    };
 
+    function parseDailyForecast(){
+        //DO SOMETHING
+    };
+
+$(".cityList").on("click", function () {
+    var cityID ; 
+    console.log('Clicked')
+    var cityID = $(this).attr("data-id");
+    getWeatherByID(cityID);
+    //var x = confirm("This works");
+    //DO SEARCH
+    //RENDER RESULT
+});
+
+$("#btnSearchCity").on("click", function () {
+    event.preventDefault();
+    var cityName = $("#cityInput").val();
+    $("#cityInput").val('');
+
+    getWeatherByCity(cityName);
+
+    //Add to a recent items list
+    console.log(cityName)
+
+})
 
 }); //CLOSING FOR DOC READY
+
