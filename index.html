@@ -26,8 +26,8 @@
           </nav>
 
           <!--PLACING A PLACEHOLDER BUTTON GROUP - THIS BUTTON GROUP WILL BE WHAT I USE TO SEARCH FOR PREVIOUS LOCATIONS-->
+          <div class='container'>
           <aside>
-
             <form class="form-inline">
               <input id="cityInput" class="form-control mr-sm-2" type="search" placeholder="Search for a City" aria-label="Search">
               <button id="btnSearchCity" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -41,12 +41,21 @@
 
             <br>
 
-            <div class="btn-group-vertical">
+            <div class="list-group list-group-flush">
               <button data-id='2643743' type="button" class="btn btn-primary cityList">London</button>
               <button data-id='2988507' type="button" class="btn btn-primary cityList">Paris</button>
               <button data-id='5128581' type="button" class="btn btn-primary cityList">New York<button>
             </div>
           </aside>
+ 
+          <section>
+            <H2 id="cityHeader">City Header</H2>
+            <H2 id="cityTemp">City Temp</H2>
+            <H2 id="cityHumid">Humidity</H2>
+            <H2 id="cityWind">Wind Speed / Direction </H2>
+            <H2 id="cityUV">UV Index</H2>
+          </section>
+        
 
 
           <section>
@@ -93,8 +102,9 @@
               </div>
             </div>
           </section>
+
+        </div>
           
-          <div id='maincontent'></div>
 
 
     <script src="scripts/script.js"></script>

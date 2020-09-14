@@ -23,21 +23,14 @@ $(document).ready(function () {
     function getWeatherByCity(cityInput) {
         var cityID ;
         var lat ;
-        var lon ; 
-
+        var lon ;
         var settings = {
             "url": apiURL + "weather?q=" + cityInput + appKey + '&units=imperial',
             "method": "GET",
             "timeout": 0,
             success: function (data) {
                 cityID = data.id;
-                //lat = data.coord.lat;
-                //lon = data.coord.lon;
-
-                getWeatherByID(cityID);
-                //getForecast(lat,lon);
-                //getUVForecast(lat,lon);
-                
+                getWeatherByID(cityID);              
             },
             error: function (ex) {
                 alert(ex.data);
@@ -66,9 +59,9 @@ $(document).ready(function () {
             success: function (data) {
                 myWeather = data;
                 cityName = data.name;
-                console.log("getWeatherByCity -> cityName", cityName)
+                currentCityHeaderEl.text(data.name);
                 cityTemp = data.main.temp ;
-                console.log("getWeatherByCity -> cityTemp", cityTemp)
+                currentCityTempEl.text(data.main.temp);
                 cityHumid = data.main.humidity ; 
                 console.log("getWeatherByCity -> cityHumid", cityHumid)
                 //cityUV = data.  ;
