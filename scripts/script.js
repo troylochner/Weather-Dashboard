@@ -108,30 +108,6 @@ $(document).ready(function () {
         });
     };
 
-    /*REMOVING - EXISTS IN SINGLE CALL API
-    function getUVForecast(lat, lon) {
-        //var uviforecast ; 
-        var settings = {
-            "url": apiURL + "uvi/forecast?" + "lat=" + lat + "&lon=" + lon + appKey,
-            "method": "GET",
-            "timeout": 0,
-            success: function (data) {
-                uviForecast = data;
-                console.log("Get UV")
-
-                //RENDER UV DATA
-                //renderUV();
-                //console.log("UV FORCAST", uviForecast)
-            },
-            error: function (ex) {
-                alert(ex.data);
-            }
-        };
-        $.ajax(settings).done(function (response) {
-
-        });
-    };
-    */
 
     function getForecast(lat, lon) {
         var forecast;
@@ -166,16 +142,16 @@ $(document).ready(function () {
     };
 
     function renderForecastCard(x){
-        var card = $("<div>").addClass("card");
+        var card = $("<div>").addClass("card bg-dark text-white");
         
         var cardHeader = $("<div>").addClass("card-header");
         var dateString = moment.unix(x.dt).format("MM/DD/YYYY");
         cardHeader.text(dateString);
 
-        var cardBody = $("<div>").addClass("card-body")
+        var cardBody = $("<div>").addClass("card-body bg-secondary text-light")
         
         var iconSource = "http://openweathermap.org/img/wn/" + x.weather[0].icon + "@2x.png"
-        var icon = $("<img>").width("64px").height("64px").addClass("img-fluid").attr("src",iconSource);
+        var icon = $("<img>").css("float","right").width("64px").height("64px").addClass("img-fluid").attr("src",iconSource);
 
         var temp = $("<p>").text("Temp: " + x.temp.max + " F");
         var humidity = $("<p>").text("Humiditiy: " + x.humidity + "%");
