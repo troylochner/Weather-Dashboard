@@ -22,13 +22,13 @@ $(document).ready(function () {
 
     //DECLARE DOCUMENT ELEMENT VARIABLES RIGHT HERE
     var prevSearchList = $("#prevSearchList");
-    var currentCityHeaderEl = $('#cityHeader');
     var currentCityTempEl = $("#cityTemp");
     var currentCityUVEl = $("#cityUV");
     var currentCityWindEl = $("#cityWind");
     var currentCityHumidEl = $("#cityHumid");
 
     //CURRENT CONDITIONS
+    var currentCityDiv = $("#currentCity")
     var currentConditionsDiv = $("#currentConditions")
 
     //DAILY DECK OF 5 DAY CARDS
@@ -44,7 +44,7 @@ $(document).ready(function () {
         loadWeatherSearches();
         renderSearchHistory();
     };
-    
+
     init();
 
     //ADD PREVIOUS CITIES TO SEARCH SIDEBAR
@@ -57,11 +57,10 @@ $(document).ready(function () {
             //IF NOTHING IS HERE - SET THIS TO NEW YORK AS A STARTING POINT
             if (weatherSearchHistory !== null) {
                 var savedSearchCities = JSON.parse(weatherSearchHistory)
-                console.log("loadWeatherSearches -> savedSearchCities", savedSearchCities)
             } else {
                 var savedSearchCities = [];
                 savedSearchCities.push('New York','Chicago','Los Angeles');
-                console.log("loadWeatherSearches -> savedSearchCities", savedSearchCities);
+                
                 //PUT THIS INTO LOCAL STORAGE
                 localStorage.setItem("weatherSearchHistory", JSON.stringify(savedSearchCities));
             };
@@ -77,7 +76,7 @@ $(document).ready(function () {
             console.log("renderSearchHistory -> weatherSearchHistory", weatherSearchHistory)
             // FOR EACH ITEM IN THE ARRAY MAKE A DAMN BUTTON
             x = localStorage.getItem("weatherSearchHistory") ;
-            x = JSON.parse(x)
+            x = JSON.parse(x);
             console.log("renderSearchHistory -> x", x)
             for (i = 0; i < x.length; i++) {
                 var btn = $("<button>");
@@ -91,7 +90,7 @@ $(document).ready(function () {
 
     //GET OUR LOCAL STORAGE AND RENDER THE BUTTONS
     //START BY GIVING THE WEATHER IN NY
-    getWeatherByCity('New York');
+    //getWeatherByCity('New York');
 
     function addToHistory(cityInput){
         console.log("Add " + cityInput);
@@ -108,7 +107,15 @@ $(document).ready(function () {
             "timeout": 0,
             success: function (data) {
                 cityID = data.id;
-                //ADD THE SEARCHED FOR CITY TO OUR HISTORY
+
+            //APPEND CITY NAME INTO SEARCH
+            var currentCityHeaderEl = $('<H3>');
+            currentCityHeaderEl.text(cityInput);
+
+            currentCityDiv.empty();
+            currentCityDiv.append(currentCityHeaderEl);
+                
+                    //ADD THE SEARCHED FOR CITY TO OUR HISTORY
                 //addToHistory(cityInput);
                 //RENDER PREVIOUS BUTTONS
                 getWeatherByID(cityID);
