@@ -93,8 +93,11 @@ $(document).ready(function () {
     //getWeatherByCity('New York');
 
     function addToHistory(cityInput){
+        savedSearchCities.push(cityInput);
+        localStorage.setItem("weatherSearchHistory", JSON.stringify(weatherSearches));
         console.log("Add " + cityInput);
         console.log("Existing " + weatherSearchHistory);
+        renderSearchHistory();
         return;
     }
 
@@ -111,20 +114,25 @@ $(document).ready(function () {
             //APPEND CITY NAME INTO SEARCH
             var currentCityHeaderEl = $('<H3>');
             currentCityHeaderEl.text(cityInput);
-
+            
             currentCityDiv.empty();
             currentCityDiv.append(currentCityHeaderEl);
                 
-                    //ADD THE SEARCHED FOR CITY TO OUR HISTORY
-                //addToHistory(cityInput);
+            //ADD THE SEARCHED FOR CITY TO OUR HISTORY
+           //addToHistory(cityInput);
                 //RENDER PREVIOUS BUTTONS
+           
                 getWeatherByID(cityID);
+
+                
+
             },
             error: function (ex) {
                 alert(ex.data);
             }
         };
         $.ajax(settings).done(function (response) {
+           
             //console.log("getWeatherByCity -> myWeather", myWeather)
         });
     };
@@ -187,14 +195,21 @@ $(document).ready(function () {
         currentTemp.text("Temperature: " + forecast.current.temp + ' F');
         currentHumid.text("Humidity: " + forecast.current.humidity + '%');
         currentWind.text("Wind Speed: " + forecast.current.wind_speed + ' MPH');
+
+        //ADD SECTION FOR EXTENDED FORECAST
+        var extForecast = $("<H3>")
+        extForecast.text("Extended Forecast")
         
 
-        currentConditionsDiv.append(cityHeader,currentTemp,currentHumid,currentWind,currentUV) 
+        currentConditionsDiv.append(cityHeader,currentTemp,currentHumid,currentWind,currentUV,extForecast) 
     };
 
     function parseDailyForecast(forecast) {
         //CLEAR THE DECK ELEMENT
         dailyDeck.empty();
+       //var sectionLabel = $("<H3>")
+        //sectionLabel.text("Extended Forcast")
+        //dailyDeck.append(sectionLabel);
         for (i = 0; i < 5; i++) {
             //FOR THE FIRST FIVE DAYS IN THE FORECAST MAKE A CARD
             renderForecastCard(forecast.daily[i]) //RENDER FORECAST
@@ -215,7 +230,7 @@ $(document).ready(function () {
 
     function renderForecastCard(x){
         var card = $("<div>").addClass("card bg-dark text-white");
-        
+
         var cardHeader = $("<div>").addClass("card-header");
         var dateString = moment.unix(x.dt).format("MM/DD/YYYY");
         cardHeader.text(dateString);
