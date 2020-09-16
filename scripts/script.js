@@ -152,11 +152,17 @@ $(document).ready(function () {
         var currentWind = $("<p>");
         var currentUV = $("<p>");
 
+        var uvRating = forecast.current.uvi;
+        var uvColorScale = uvColor(uvRating);
+        currentUV.text("UV Index: " + forecast.current.uvi);
+        currentUV.css("background-color",uvColorScale);
+
+
         cityHeader.text(lastSearch);
         currentTemp.text("Temperature: " + forecast.current.temp + ' F');
         currentHumid.text("Humidity: " + forecast.current.humidity + '%');
         currentWind.text("Wind Speed: " + forecast.current.wind_speed + ' MPH');
-        currentUV.text("UV Index: " + forecast.current.uvi);
+        
 
         currentConditionsDiv.append(cityHeader,currentTemp,currentHumid,currentWind,currentUV) 
     };
@@ -168,6 +174,18 @@ $(document).ready(function () {
             //FOR THE FIRST FIVE DAYS IN THE FORECAST MAKE A CARD
             renderForecastCard(forecast.daily[i]) //RENDER FORECAST
         }    
+    };
+
+    function uvColor(uvRating) {
+        if (uvRating > 7) {
+            uvColorScale = '#ee5253'
+        } else if (uvRating < 3) {
+            uvColorScale = '#10ac84'
+        } else {
+            uvColorScale = '#feca57'
+        }
+        console.log(uvColorScale);
+        return uvColorScale
     };
 
     function renderForecastCard(x){
