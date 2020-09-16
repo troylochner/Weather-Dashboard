@@ -30,9 +30,10 @@ $(document).ready(function () {
     //load previus searches.
     function loadWeatherSearches() {
         
-        var myValue = localStorage.getItem("prevCities");
-        if (myValue !== null) {
-            var savedSearchCities = JSON.parse(myValue);
+        //BUILD PREVIOUS CITIES LIST
+        var prevCities = localStorage.getItem("prevCities");
+        if (prevCities !== null) {
+            var savedSearchCities = JSON.parse(prevCities);
             if (savedSearchCities !== null) {
                 weatherSearches = savedSearchCities;
             }
@@ -62,6 +63,8 @@ $(document).ready(function () {
                //SAVE PREVIOUS SEARCH
                 lastSearch = cityInput;
                 localStorage.setItem("lastWeatherSearch", JSON.stringify(lastSearch));
+
+                //ADD THE CITY TO THE LIST OF PREV CITIES SEARCHED
                 prevCities.push(cityInput);
                 prevCities.sort();
                 localStorage.setItem("prevCities", JSON.stringify(prevCities));
@@ -80,6 +83,7 @@ $(document).ready(function () {
         });
     };
 
+    /* REMOVING THIS - AS I WILL SKIP THIS FOR NOW. IDEAL SITUATION IS TO DO EVERY CITY SEARCH BY ID. NEED TO WORK OUR A BETTER LOCAL STORAGE PLAN TO HANDLE THIS FUNCTION.
     function getWeatherByID(cityID) {
         var settings = {
             "url": apiURL + "weather?id=" + cityID + appKey + '&units=imperial',
@@ -161,6 +165,9 @@ $(document).ready(function () {
        }
     };
 
+    function renderCurrentWeather();
+
+
     function renderForecast(x){
         var currentTemp = x.temp;
         console.log("renderForecast -> currentTemp", currentTemp)
@@ -175,6 +182,7 @@ $(document).ready(function () {
 
     //ADD PREVIOUS CITIES TO SEARCH SIDEBAR
 var searchedCityDiv = $("#recentCitySelect");
+
 function renderPrevSearches() {
     searchedCityDiv.html("");
     weatherSearches.forEach(element => {
@@ -184,7 +192,7 @@ function renderPrevSearches() {
         searchedCityDiv.append(btn);
     });
 }
-renderPrevSearches();
+loadWeatherSearches();
 //END ADD
 
     $(".cityButton").on("click", function () {
