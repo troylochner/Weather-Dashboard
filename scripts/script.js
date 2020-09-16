@@ -167,24 +167,24 @@ $(document).ready(function () {
 
     function renderForecastCard(x){
         var card = $("<div>").addClass("card");
+        
         var cardHeader = $("<div>").addClass("card-header");
-        var cardBody = $("<div>").addClass("card-body")
         var dateString = moment.unix(x.dt).format("MM/DD/YYYY");
         cardHeader.text(dateString);
-        cardBody.text();
+
+        var cardBody = $("<div>").addClass("card-body")
+        
+        var iconSource = "http://openweathermap.org/img/wn/" + x.weather[0].icon + "@2x.png"
+        var icon = $("<img>").width("64px").height("64px").addClass("img-fluid").attr("src",iconSource);
+
+        var temp = $("<p>").text("Temp: " + x.temp.max + " F");
+        var humidity = $("<p>").text("Humiditiy: " + x.humidity + "%");
+
+        
         card.append(cardHeader);
+        cardBody.append(icon,temp,humidity);
         card.append(cardBody);
         dailyDeck.append(card);
-   
-        /*
-        var currentTemp = x.temp;
-        console.log("renderForecast -> currentTemp", currentTemp)
-        var highTemp = x.temp.max + " F"
-        console.log("renderForecast -> highTemp", highTemp);
-        var lowTemp = x.temp.min + " F";
-        var humidity = x.humidity + "%";
-        console.log("renderForecast -> humidity", humidity)*/
-
 
     };
 
