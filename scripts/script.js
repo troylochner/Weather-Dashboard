@@ -16,8 +16,9 @@ $(document).ready(function () {
     var cityInput;
 
     //STORAGE
-    var prevCities = [];
-    var lastCity;
+    var weatherSearchHistory = [];
+    var savedSearchCities =[];
+    var lastCity ;
 
     //DECLARE DOCUMENT ELEMENT VARIABLES RIGHT HERE
     var prevSearchList = $("#prevSearchList");
@@ -33,28 +34,70 @@ $(document).ready(function () {
     //DAILY DECK OF 5 DAY CARDS
     var dailyDeck = $("#dailyDeck");
 
+    //LIST OF RECENTLY SEARCHED CITIES DIV
+    var recentSearchDiv = $("#recentSearchDiv");
+
+    //FUNCTION TO GRAB PREVIOUS SEARCHES FROM LOCAL STORAGE
+
+    function init(){
+        console.log("Run initialization")
+        loadWeatherSearches();
+        renderSearchHistory();
+    };
+    
+    init();
+
+    //ADD PREVIOUS CITIES TO SEARCH SIDEBAR
+    function loadWeatherSearches() {
+        console.log("loadWeatherSearches -> loadWeatherSearches")
+            
+            //GET PREVIOUS SEARCHES FROM LOCAL STORAGE
+            weatherSearchHistory = localStorage.getItem("weatherSearchHistory");
+    
+            //IF NOTHING IS HERE - SET THIS TO NEW YORK AS A STARTING POINT
+            if (weatherSearchHistory !== null) {
+                var savedSearchCities = JSON.parse(weatherSearchHistory)
+                console.log("loadWeatherSearches -> savedSearchCities", savedSearchCities)
+            } else {
+                var savedSearchCities = [];
+                savedSearchCities.push('New York','Chicago','Los Angeles');
+                console.log("loadWeatherSearches -> savedSearchCities", savedSearchCities);
+                //PUT THIS INTO LOCAL STORAGE
+                localStorage.setItem("weatherSearchHistory", JSON.stringify(savedSearchCities));
+            };
+            renderSearchHistory();
+      
+        };
+    
+        function renderSearchHistory() {
+            //CLEAR OUR DIV
+            var recentSearchDiv = $("#recentSearchDiv");
+            recentSearchDiv.empty();  
+            //GET THE SEARCH HISTORY FROM COLD STORAGE
+            console.log("renderSearchHistory -> weatherSearchHistory", weatherSearchHistory)
+            // FOR EACH ITEM IN THE ARRAY MAKE A DAMN BUTTON
+            x = localStorage.getItem("weatherSearchHistory") ;
+            x = JSON.parse(x)
+            console.log("renderSearchHistory -> x", x)
+            for (i = 0; i < x.length; i++) {
+                var btn = $("<button>");
+                btn.html(x[i]);
+                console.log("Added button :" + x[i]);
+               btn.addClass("btn cityButton btn-block btn-light");
+                //APPEND THE BUTTON TO THE DIV
+                recentSearchDiv.append(btn);
+            }
+        };
+
+    //GET OUR LOCAL STORAGE AND RENDER THE BUTTONS
     //START BY GIVING THE WEATHER IN NY
     getWeatherByCity('New York');
 
-
-    //load previus searches.
-    function loadWeatherSearches() {
-        
-        //BUILD PREVIOUS CITIES LIST
-        var prevCities = localStorage.getItem("prevCities");
-        if (prevCities !== null) {
-            var savedSearchCities = JSON.parse(prevCities);
-            if (savedSearchCities !== null) {
-                weatherSearches = savedSearchCities;
-            }
-        }
-        //LAST CITY SEARCHED FOR
-        var myValue = localStorage.getItem("lastSearch");
-        if (myValue !== null) {
-            lastCity = myValue;
-        }
+    function addToHistory(cityInput){
+        console.log("Add " + cityInput);
+        console.log("Existing " + weatherSearchHistory);
+        return;
     }
-    loadWeatherSearches();
 
     //DEFINE SOME FUNCTIONS:
     function getWeatherByCity(cityInput) {
@@ -65,21 +108,9 @@ $(document).ready(function () {
             "timeout": 0,
             success: function (data) {
                 cityID = data.id;
-                //I DO NOT LIKE GETTING THE WEATHER BY THE CITY NAME ; SO IF POSSIBLE - PASS INTO ANOTHER FUNCTION TO GET THE WEATHER BY THE ID INSTEAD. DO THE WORK HERE.
-                //PASS THIS TO THE GET WEATHER BY ID
-
-               //SAVE PREVIOUS SEARCH
-                lastSearch = cityInput;
-                localStorage.setItem("lastWeatherSearch", JSON.stringify(lastSearch));
-
-                //ADD THE CITY TO THE LIST OF PREV CITIES SEARCHED
-                prevCities.push(cityInput);
-                prevCities.sort();
-                localStorage.setItem("prevCities", JSON.stringify(prevCities));
-                //ADD A CITY LISTING TO THE BUTTON ARRAY
-                renderPrevSearches();            
-                
-                //NOW THAT EVERYTHING IS SAVED --> GO GET A PROPER FORECAST
+                //ADD THE SEARCHED FOR CITY TO OUR HISTORY
+                //addToHistory(cityInput);
+                //RENDER PREVIOUS BUTTONS
                 getWeatherByID(cityID);
             },
             error: function (ex) {
@@ -97,24 +128,17 @@ $(document).ready(function () {
             "method": "GET",
             "timeout": 0,
             success: function (data) {
-
-                //RENDER CURRENT WEATHER DATA
-                //renderCurrentWeather()
-                console.log("Get Current")
                 lat = data.coord.lat;
                 lon = data.coord.lon;
                 getForecast(lat, lon);
-                //getUVForecast(lat, lon);
             },
             error: function (ex) {
                 alert(ex.data);
             }
         };
         $.ajax(settings).done(function (response) {
-            //console.log("getWeatherByCity -> myWeather", myWeather)
         });
     };
-
 
     function getForecast(lat, lon) {
         var forecast;
@@ -123,17 +147,11 @@ $(document).ready(function () {
             "method": "GET",
             "timeout": 0,
             success: function (data) {
-                console.log("Get Forecast BY LAT LON")
-               
+                console.log("Getting the forecast")      
                 forecast = data; 
-
-                console.log("Render Current Forecast " + forecast );
-
+                console.log("Forecast Data: " + forecast );
                 renderCurrentConditions(forecast);
-
-                console.log("getForecast -> theForecast", forecast)
-                parseDailyForecast(forecast);
-                
+                parseDailyForecast(forecast);            
             },
             error: function (ex) {
                 alert(ex.data);
@@ -158,7 +176,7 @@ $(document).ready(function () {
         currentUV.css("background-color",uvColorScale);
 
 
-        cityHeader.text(lastSearch);
+        //cityHeader.text(lastSearch);
         currentTemp.text("Temperature: " + forecast.current.temp + ' F');
         currentHumid.text("Humidity: " + forecast.current.humidity + '%');
         currentWind.text("Wind Speed: " + forecast.current.wind_speed + ' MPH');
@@ -211,21 +229,6 @@ $(document).ready(function () {
 
     };
 
-    //ADD PREVIOUS CITIES TO SEARCH SIDEBAR
-var searchedCityDiv = $("#recentCitySelect");
-
-function renderPrevSearches() {
-    searchedCityDiv.html("");
-    weatherSearches.forEach(element => {
-        var btn = $("<button>");
-        btn.html(element);
-        btn.addClass("btn cityButton btn-block btn-light");
-        searchedCityDiv.append(btn);
-    });
-}
-loadWeatherSearches();
-//END ADD
-
     $(".cityButton").on("click", function () {
         var cityName;
         cityName = $(this).html();
@@ -246,25 +249,6 @@ loadWeatherSearches();
         }
     })
 
-
-
-
-
-
 }); //CLOSING FOR DOC READY
 
-/*
-//DECLARE A CARD
-//$("<div>") --card
-card header --> date
-card body -->
-define children ---
-card icon
-card temp
-card humid
----append to card body
---append header + body to card
---- add card to card deck
-
-*/
 
