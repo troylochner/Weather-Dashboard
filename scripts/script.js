@@ -33,6 +33,9 @@ $(document).ready(function () {
     //DAILY DECK OF 5 DAY CARDS
     var dailyDeck = $("#dailyDeck");
 
+    //START BY GIVING THE WEATHER IN NY
+    getWeatherByCity('New York');
+
 
     //load previus searches.
     function loadWeatherSearches() {
