@@ -26,6 +26,9 @@ $(document).ready(function () {
     var currentCityWindEl = $("#cityWind");
     var currentCityHumidEl = $("#cityHumid");
 
+    //DAILY DECK OF 5 DAY CARDS
+    var dailyDeck = $("#dailyDeck");
+
 
     //load previus searches.
     function loadWeatherSearches() {
@@ -45,8 +48,6 @@ $(document).ready(function () {
         }
     }
     loadWeatherSearches();
-
-
 
     //DEFINE SOME FUNCTIONS:
     function getWeatherByCity(cityInput) {
@@ -83,7 +84,6 @@ $(document).ready(function () {
         });
     };
 
-    /* REMOVING THIS - AS I WILL SKIP THIS FOR NOW. IDEAL SITUATION IS TO DO EVERY CITY SEARCH BY ID. NEED TO WORK OUR A BETTER LOCAL STORAGE PLAN TO HANDLE THIS FUNCTION.
     function getWeatherByID(cityID) {
         var settings = {
             "url": apiURL + "weather?id=" + cityID + appKey + '&units=imperial',
@@ -140,11 +140,12 @@ $(document).ready(function () {
             "method": "GET",
             "timeout": 0,
             success: function (data) {
-                console.log("Get Forecast")
-                forecast = data;
-                renderForecast(forecast.current);
-                parseDailyForecast(forecast);
+                console.log("Get Forecast BY LAT LON")
+               
+                forecast = data; 
                 console.log("getForecast -> theForecast", forecast)
+                parseDailyForecast(forecast);
+                
             },
             error: function (ex) {
                 alert(ex.data);
@@ -156,26 +157,33 @@ $(document).ready(function () {
     };
 
     function parseDailyForecast(forecast) {
-       if (forecast.daily.length > 0){
-           for (i=0;i<5;i++){
-               //console.log(forecast.daily[i]);
-               renderForecast(forecast.daily[i]) //RENDER FORECAST
-           }
-
-       }
+        //CLEAR THE DECK ELEMENT
+        dailyDeck.empty();
+        for (i = 0; i < 5; i++) {
+            //FOR THE FIRST FIVE DAYS IN THE FORECAST MAKE A CARD
+            renderForecastCard(forecast.daily[i]) //RENDER FORECAST
+        }    
     };
 
-    function renderCurrentWeather();
-
-
-    function renderForecast(x){
+    function renderForecastCard(x){
+        var card = $("<div>").addClass("card");
+        var cardHeader = $("<div>").addClass("card-header");
+        var cardBody = $("<div>").addClass("card-body")
+        var dateString = moment.unix(x.dt).format("MM/DD/YYYY");
+        cardHeader.text(dateString);
+        cardBody.text();
+        card.append(cardHeader);
+        card.append(cardBody);
+        dailyDeck.append(card);
+   
+        /*
         var currentTemp = x.temp;
         console.log("renderForecast -> currentTemp", currentTemp)
         var highTemp = x.temp.max + " F"
         console.log("renderForecast -> highTemp", highTemp);
         var lowTemp = x.temp.min + " F";
         var humidity = x.humidity + "%";
-        console.log("renderForecast -> humidity", humidity)
+        console.log("renderForecast -> humidity", humidity)*/
 
 
     };
@@ -214,4 +222,26 @@ loadWeatherSearches();
             return false;
         }
     })
+
+
+
+
+
+
 }); //CLOSING FOR DOC READY
+
+/*
+//DECLARE A CARD
+//$("<div>") --card
+card header --> date
+card body -->
+define children ---
+card icon
+card temp
+card humid
+---append to card body
+--append header + body to card
+--- add card to card deck
+
+*/
+
