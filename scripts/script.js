@@ -14,7 +14,9 @@ $(document).ready(function () {
     var lon;
     var test;
 
-
+    //STORAGE
+    var prevCities = [];
+    var lastCity;
 
     //DECLARE DOCUMENT ELEMENT VARIABLES RIGHT HERE
     var prevSearchList = $("#prevSearchList");
@@ -24,8 +26,30 @@ $(document).ready(function () {
     var currentCityWindEl = $("#cityWind");
     var currentCityHumidEl = $("#cityHumid");
 
+
+    //load previus searches.
+    function loadWeatherSearches() {
+        
+        var myValue = localStorage.getItem("prevCities");
+        if (myValue !== null) {
+            var savedSearchCities = JSON.parse(myValue);
+            if (savedSearchCities !== null) {
+                weatherSearches = savedSearchCities;
+            }
+        }
+        //LAST CITY SEARCHED FOR
+        var myValue = localStorage.getItem("lastSearch");
+        if (myValue !== null) {
+            lastCity = myValue;
+        }
+    }
+    loadWeatherSearches();
+
+
+
     //DEFINE SOME FUNCTIONS:
     function getWeatherByCity(cityInput) {
+        //clear data
         var settings = {
             "url": apiURL + "weather?q=" + cityInput + appKey + '&units=imperial',
             "method": "GET",
@@ -34,6 +58,17 @@ $(document).ready(function () {
                 cityID = data.id;
                 //I DO NOT LIKE GETTING THE WEATHER BY THE CITY NAME ; SO IF POSSIBLE - PASS INTO ANOTHER FUNCTION TO GET THE WEATHER BY THE ID INSTEAD. DO THE WORK HERE.
                 //PASS THIS TO THE GET WEATHER BY ID
+
+               //SAVE PREVIOUS SEARCH
+                lastSearch = cityInput;
+                localStorage.setItem("lastWeatherSearch", JSON.stringify(lastSearch));
+                prevCities.push(cityInput);
+                prevCities.sort();
+                localStorage.setItem("prevCities", JSON.stringify(prevCities));
+                //ADD A CITY LISTING TO THE BUTTON ARRAY
+                
+                
+                
                 getWeatherByID(cityID);
             },
             error: function (ex) {
@@ -158,25 +193,4 @@ $(document).ready(function () {
         }
 
     })
-
-    /*
-    //RENDER INDIVIDUAL SECTIONS OF THE WEATHER RESPONSE
-    function renderCard(response, headerEl, TempEl, HumEl, WindEl, headerHtml) {
-        headerEl.html(headerHtml);
-        var imgPath = getImagePath(response);
-        headerEl.append('<img id="currentImg" src="' + imgPath + '" height="42" width="42" />')
-        TempEl.html("Temperature : " + response.main.temp + " F");
-        HumEl.html("Humidity : " + response.main.humidity + " %");
-        WindEl.html("Wind Speed : " + response.wind.speed + " mph");
-    }
-
-    //CLEAR WEATHER 
-        function clearWeatherData() {
-            currentWeatherHeaderEl.html("City/Date : Loading...");
-            currentWeatherTempEl.html("Temperature : ");
-            currentWeatherHumEl.html("Humidity : ");
-            currentWeatherWindEl.html("Wind Speed : ");
-            currentWeatherUVEl.html("UV : ");
-        }
-    */
 }); //CLOSING FOR DOC READY
