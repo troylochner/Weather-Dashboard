@@ -149,18 +149,13 @@ $(document).ready(function () {
         var currentWind = $("<p>");
         var currentUV = $("<p>");
 
-        cityHeader.text('CITY WOULD GO HERE')
+        cityHeader.text(lastSearch);
         currentTemp.text("Temperature: " + forecast.current.temp + ' F');
         currentHumid.text("Humidity: " + forecast.current.humidity + '%');
         currentWind.text("Wind Speed: " + forecast.current.wind_speed + ' MPH');
         currentUV.text("UV Index: " + forecast.current.uvi);
 
-
-        currentConditionsDiv.append(cityHeader,currentTemp,currentHumid,currentWind,currentUV)
-        
-
-        
-
+        currentConditionsDiv.append(cityHeader,currentTemp,currentHumid,currentWind,currentUV) 
     };
 
     function parseDailyForecast(forecast) {
