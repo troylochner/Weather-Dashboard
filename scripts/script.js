@@ -66,9 +66,9 @@ $(document).ready(function () {
                 prevCities.sort();
                 localStorage.setItem("prevCities", JSON.stringify(prevCities));
                 //ADD A CITY LISTING TO THE BUTTON ARRAY
+                renderPrevSearches();            
                 
-                
-                
+                //NOW THAT EVERYTHING IS SAVED --> GO GET A PROPER FORECAST
                 getWeatherByID(cityID);
             },
             error: function (ex) {
@@ -173,10 +173,24 @@ $(document).ready(function () {
 
     };
 
+    //ADD PREVIOUS CITIES TO SEARCH SIDEBAR
+var searchedCityDiv = $("#recentCitySelect");
+function renderPrevSearches() {
+    searchedCityDiv.html("");
+    weatherSearches.forEach(element => {
+        var btn = $("<button>");
+        btn.html(element);
+        btn.addClass("btn cityButton btn-block btn-light");
+        searchedCityDiv.append(btn);
+    });
+}
+renderPrevSearches();
+//END ADD
+
     $(".cityButton").on("click", function () {
-        var cityID;
-        cityID = $(this).attr("data-id");
-        getWeatherByID(cityID);
+        var cityName;
+        cityName = $(this).html();
+        getWeatherByCity(cityName);
     });
 
     $("#cityInput").on("keypress", function (e) {
@@ -191,6 +205,5 @@ $(document).ready(function () {
             console.log(cityName)
             return false;
         }
-
     })
 }); //CLOSING FOR DOC READY
