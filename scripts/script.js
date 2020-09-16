@@ -13,6 +13,7 @@ $(document).ready(function () {
     var lat;
     var lon;
     var test;
+    var cityInput;
 
     //STORAGE
     var prevCities = [];
@@ -25,6 +26,9 @@ $(document).ready(function () {
     var currentCityUVEl = $("#cityUV");
     var currentCityWindEl = $("#cityWind");
     var currentCityHumidEl = $("#cityHumid");
+
+    //CURRENT CONDITIONS
+    var currentConditionsDiv = $("#currentConditions")
 
     //DAILY DECK OF 5 DAY CARDS
     var dailyDeck = $("#dailyDeck");
@@ -119,6 +123,11 @@ $(document).ready(function () {
                 console.log("Get Forecast BY LAT LON")
                
                 forecast = data; 
+
+                console.log("Render Current Forecast " + forecast );
+
+                renderCurrentConditions(forecast);
+
                 console.log("getForecast -> theForecast", forecast)
                 parseDailyForecast(forecast);
                 
@@ -130,6 +139,28 @@ $(document).ready(function () {
         $.ajax(settings).done(function (response) {
 
         });
+    };
+
+    function renderCurrentConditions(forecast){
+        currentConditionsDiv.empty();
+        var cityHeader = $("<H2>");
+        var currentTemp = $("<p>");
+        var currentHumid = $("<p>");
+        var currentWind = $("<p>");
+        var currentUV = $("<p>");
+
+        cityHeader.text('CITY WOULD GO HERE')
+        currentTemp.text("Temperature: " + forecast.current.temp + ' F');
+        currentHumid.text("Humidity: " + forecast.current.humidity + '%');
+        currentWind.text("Wind Speed: " + forecast.current.wind_speed + ' MPH');
+        currentUV.text("UV Index: " + forecast.current.uvi);
+
+
+        currentConditionsDiv.append(cityHeader,currentTemp,currentHumid,currentWind,currentUV)
+        
+
+        
+
     };
 
     function parseDailyForecast(forecast) {
