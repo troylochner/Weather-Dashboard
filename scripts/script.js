@@ -129,20 +129,28 @@
          };
      }
 
-
      function getWeatherByCity(cityInput) {
          //var cityID ; 
          var settings = {
              "url": apiURL + "weather?q=" + cityInput + appKey + '&units=imperial',
              "method": "GET",
              "timeout": 0,
+             success: function (data) {
+                cityID = data.id;
+                getWeatherByID(data.id);
+                renderCurrentHeader(cityInput);
+                addToHistory(cityInput);
+            },
+            error: function (ex) {
+                alert(cityInput + " was not found by this API");
+            }
          };
 
          $.ajax(settings).done(function (response) {
-             cityID = response.id;
-             getWeatherByID(response.id);
-             renderCurrentHeader(cityInput);
-             addToHistory(cityInput);
+             //cityID = response.id;
+             //getWeatherByID(response.id);
+             //renderCurrentHeader(cityInput);
+             //addToHistory(cityInput);
              //console.log(response.id);
          });
      }
