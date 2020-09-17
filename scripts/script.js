@@ -41,8 +41,8 @@
              searchHistory = JSON.parse(locSearchHistory);
          };
          locLastSearch = localStorage.getItem("LastSearch");
-         if (locLastSearch===null){
-            locLastSearch = "London";
+         if (locLastSearch === null) {
+             locLastSearch = "London";
          }
      };
 
@@ -63,10 +63,12 @@
              searchHistory = [];
              searchHistory.push(cityInput)
          } else {
-             searchHistory.push(cityInput)
+             if ( checkArray(searchHistory, cityInput) === false ) {
+                 searchHistory.push(cityInput)
+             }
          }
 
-         //IF THE ITEM IS UNIQUE ADD IT TO OUR LOCAL STORAE
+         //IF THE ITEM IS UNIQUE ADD IT TO OUR LOCAL STORAGE
          locSearchHistory = localStorage.setItem("SearchHistory", JSON.stringify(searchHistory));
          console.log(searchHistory);
          renderSearchHistory();
@@ -83,6 +85,16 @@
          init();
      }
 
+     //CHECK IF ITEM IS IN SEARCH HISTORY ARRAY
+     function checkArray(array, value) {
+         if (jQuery.inArray(value, array) != -1) {
+             console.log("is in array");
+             return true;
+         } else {
+             console.log("is NOT in array");
+             return false;
+         }
+     }
      //RENDER SEARCH HISTORY
      function renderSearchHistory() {
          //DEFINE AND EMPTY THE DIV
