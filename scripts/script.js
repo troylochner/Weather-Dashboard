@@ -4,9 +4,10 @@
 
  //GET OUR HISTORY FROM LOCAL STORAGE
  var locSearchHistory = localStorage.getItem("SearchHistory");
-  var searchHistory = JSON.parse(locSearchHistory);
-  var locLastSearch = localStorage.getItem("LastSearch");
+ var searchHistory = JSON.parse(locSearchHistory);
+ var locLastSearch = localStorage.getItem("LastSearch");
 
+ var cityInput ; 
 
  //CURRENT CONDITIONS
  var currentCityDiv = $("#currentCity")
@@ -44,7 +45,7 @@
      function init() {
          //console.log("Run initialization")
          //loadWeatherSearches();
-         // renderSearchHistory();
+         renderSearchHistory();
      };
 
      //ADD PREVIOUS CITIES TO SEARCH SIDEBAR
@@ -81,27 +82,7 @@
 
      };
 
-     function renderSearchHistory(searchHistory) {
-         //DEFINE AND EMPTY THE DIV
-         var recentSearchDiv = $("#recentSearchDiv");
-         recentSearchDiv.empty();
 
-         weatherSearchHistory = localStorage.getItem("weatherSearchHistory");
-         var searchHistory = JSON.parse(weatherSearchHistory);
-         console.log("renderSearchHistory -> searchHistory", searchHistory)
-
-         if (searchHistory !== undefined) {
-             for (i = 0; i < searchHistory.length; i++) {
-                 var btn = $("<button>");
-                 btn.html(searchHistory[i]);
-                 btn.addClass("btn cityButton btn-block btn-light");
-                 //APPEND THE BUTTON TO THE DIV
-                 recentSearchDiv.append(btn);
-             }
-         };
-
-
-     }
 
      //RUN INIT
      init();
@@ -120,9 +101,11 @@
             searchHistory=[];
             searchHistory.push(cityInput)
         } else{searchHistory.push(cityInput)}
-        localStorage.setItem("SearchHistory",searchHistory);
         
+        //IF THE ITEM IS UNIQUE ADD IT TO OUR LOCAL STORAE
+        locSearchHistory = localStorage.setItem("SearchHistory",JSON.stringify(searchHistory));
         console.log(searchHistory) ;
+        renderSearchHistory();
      }
 
      //SIMPLE ADD TO HISTORY
@@ -132,6 +115,33 @@
         //searchHistory = searchHistory.push(cityInput);
         //console.log("addToHistory -> searchHistory", searchHistory)
      }
+
+     //RENDER SEARCH HISTORY
+     function renderSearchHistory() {
+        //DEFINE AND EMPTY THE DIV
+        var recentSearchDiv = $("#recentSearchDiv");
+        recentSearchDiv.empty();
+        
+        console.log("renderSearchHistory -> searchHistory", searchHistory)
+
+        if (searchHistory !== null) {
+            for (i = 0; i < searchHistory.length; i++) {
+                var btn = $("<button>");
+                btn.text(searchHistory[i]);
+                btn.addClass("cityButton btn btn-block btn-light");
+                //APPEND THE BUTTON TO THE DIV
+                recentSearchDiv.append(btn);
+
+                btn.click(function (event) {
+                    var cityInput = $(this).text();
+                    console.log("renderSearchHistory -> cityInput", cityInput)
+                    getWeatherByCity(cityInput);
+                });
+            }
+        };
+
+
+    }
 
      /*
 
@@ -279,10 +289,9 @@
      //USER ACTIONS
      //ADD A CLICK TO SEARCH BY CITY NAME
      $(".cityButton").on("click", function () {
-         //console.log("cityButton", cityButton)
-         event.preventDefault();
-         var cityInput;
+         //event.preventDefault();
          cityInput = $(this).text();
+         console.log("setSearchHistory -> cityInput", cityInput)
          getWeatherByCity(cityInput);
          //console.log("cityID", cityID)
      });
