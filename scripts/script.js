@@ -41,7 +41,7 @@
              searchHistory = JSON.parse(locSearchHistory);
          };
          locLastSearch = localStorage.getItem("LastSearch");
-         if (locLastSearch === null) {
+         if (locLastSearch.length===0) {
              locLastSearch = "London";
          }
      };
@@ -82,6 +82,7 @@
      //CLEAR HISTORY
      function clearHistory() {
          localStorage.setItem("SearchHistory", "");
+         localStorage.setItem("LastSearch","");
          init();
      }
 
@@ -145,13 +146,7 @@
                 alert(cityInput + " was not found by this API");
             }
          };
-
          $.ajax(settings).done(function (response) {
-             //cityID = response.id;
-             //getWeatherByID(response.id);
-             //renderCurrentHeader(cityInput);
-             //addToHistory(cityInput);
-             //console.log(response.id);
          });
      }
 

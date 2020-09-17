@@ -11,6 +11,10 @@
 
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */
+    body{
+      background-color: smoke;
+    }
+    
     .navbar {
       margin-bottom: 0;
       border-radius: 0;
@@ -53,21 +57,6 @@
       }
     }
   </style>
-
-
-  <!--
-              <form class="form-inline">
-                <input id="cityInput" class="form-control mr-sm-2" type="search" placeholder="Search for a City"
-                  aria-label="Search">
-                <button id="btnSearchCity" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-              </form>
-
-
-              <button data-id='2643743' type="button" class="btn btn-primary cityList">London</button>
-              <button data-id='2988507' type="button" class="btn btn-primary cityList">Paris</button>
-              <button data-id='5128581' type="button" class="btn btn-primary cityList">New York<button>
-  -->
-
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
   </script>
@@ -85,10 +74,12 @@
 <body>
 
   <div class="container-fluid text-center">
+    
     <div class="row content">
-      <div class="col-sm-2 sidenav">
-        <form class="form-inline">
-          <input id="cityInput" class="form-control mr-sm-2" type="search" placeholder="Search for a City"
+      
+      <div class="col-sm-3 sidenav">
+        <form  class="form-inline ">
+          <input id="cityInput" style="width:100%" class="form-control mr-sm-2" type="search" placeholder="City Search"
             aria-label="Search"></input>
         </form>
         <hr>
@@ -101,7 +92,7 @@
       </div>
 
 
-      <div class="col-sm-10 text-left">
+      <div class="col-sm-9 text-left">
         <h1>Simple Weather Dashboard</h1>
         <hr>
         <div id="currentCity"></div>
