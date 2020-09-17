@@ -4,8 +4,9 @@
 
  //GET OUR HISTORY FROM LOCAL STORAGE
  var locSearchHistory = localStorage.getItem("SearchHistory");
- var locLastSearch = localStorage.getItem("LastSearch");
- var searchHistory = JSON.parse(locSearchHistory);
+  var searchHistory = JSON.parse(locSearchHistory);
+  var locLastSearch = localStorage.getItem("LastSearch");
+
 
  //CURRENT CONDITIONS
  var currentCityDiv = $("#currentCity")
@@ -110,6 +111,18 @@
         localStorage.setItem("LastSearch",cityInput);
         locLastSearch = cityInput ;
         console.log("locLastSearch : ", locLastSearch) 
+        setSearchHistory(cityInput);
+     }
+
+     //ADD TO FULL SEARCH HISTORY
+     function setSearchHistory(cityInput){
+        if (searchHistory===null){
+            searchHistory=[];
+            searchHistory.push(cityInput)
+        } else{searchHistory.push(cityInput)}
+        localStorage.setItem("SearchHistory",searchHistory);
+        
+        console.log(searchHistory) ;
      }
 
      //SIMPLE ADD TO HISTORY
