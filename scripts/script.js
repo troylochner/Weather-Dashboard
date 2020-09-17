@@ -35,13 +35,13 @@
      //ADD PREVIOUS CITIES TO SEARCH SIDEBAR
      function loadWeatherSearches() {
          locSearchHistory = localStorage.getItem("SearchHistory");
-         if (locSearchHistory.length === 0) {
+         if (localStorage.getItem("SearchHistory") === null || locSearchHistory.length < 1) {
              searchHistory = [];
          } else {
              searchHistory = JSON.parse(locSearchHistory);
          };
          locLastSearch = localStorage.getItem("LastSearch");
-         if (locLastSearch.length===0) {
+         if (localStorage.getItem("LastSearch") ===null) {
              locLastSearch = "London";
          }
      };
