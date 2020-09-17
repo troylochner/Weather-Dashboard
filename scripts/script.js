@@ -3,9 +3,9 @@
  var apiURL = "https://api.openweathermap.org/data/2.5/";
 
  //GET OUR HISTORY FROM LOCAL STORAGE
- var locSearchHistory = localStorage.getItem("SearchHistory");
- var searchHistory = JSON.parse(locSearchHistory);
- var locLastSearch = localStorage.getItem("LastSearch");
+ var locSearchHistory ;
+ var searchHistory ;
+ var locLastSearch ;
 
  var cityInput ; 
 
@@ -43,43 +43,20 @@
 
      //FUNCTION TO GRAB PREVIOUS SEARCHES FROM LOCAL STORAGE
      function init() {
-         //console.log("Run initialization")
-         //loadWeatherSearches();
+         console.log("Run initialization")
+         loadWeatherSearches();
          renderSearchHistory();
      };
 
      //ADD PREVIOUS CITIES TO SEARCH SIDEBAR
      function loadWeatherSearches() {
-         //GET PREVIOUS SEARCHES FROM LOCAL STORAGE
-         weatherSearchHistory = localStorage.getItem("weatherSearchHistory");
-         console.log("loadWeatherSearches -> weatherSearchHistory", weatherSearchHistory)
-
-         /*
-         
-         if (weatherSearchHistory !== null) {
-             console.log("loadWeatherSearches -> searchHistory", searchHistory)
-             var searchHistory = JSON.parse(weatherSearchHistory);
-             renderSearchHistory();
-         }
-             */
-
-
-
-
-
-         /*
-
-         //IF NOTHING IS HERE - SET THIS TO NEW YORK AS A STARTING POINT
-         if (searchHistory !== null) {
-             var savedSearchCities = JSON.parse(weatherSearchHistory)
-         } else {
-             var savedSearchCities = [];
-             savedSearchCities.push('New York','Chicago','Los Angeles');
-             
-             //PUT THIS INTO LOCAL STORAGE
-             localStorage.setItem("weatherSearchHistory", JSON.stringify(savedSearchCities));
-         };*/
-
+        locSearchHistory = localStorage.getItem("SearchHistory");
+        if (locSearchHistory.length===0){
+            searchHistory = [];
+        }else{ searchHistory = JSON.parse(locSearchHistory);
+        };
+        locLastSearch = localStorage.getItem("LastSearch");
+        
      };
 
 
@@ -116,6 +93,11 @@
         //console.log("addToHistory -> searchHistory", searchHistory)
      }
 
+     function clearHistory(){
+        localStorage.setItem("SearchHistory","");
+        init();
+     }
+
      //RENDER SEARCH HISTORY
      function renderSearchHistory() {
         //DEFINE AND EMPTY THE DIV
@@ -137,7 +119,16 @@
                     console.log("renderSearchHistory -> cityInput", cityInput)
                     getWeatherByCity(cityInput);
                 });
+                
             }
+
+            var clearBtn = $("<button>")
+                clearBtn.addClass("btn btn-block btn-dark").text("Clear History")
+                recentSearchDiv.append(clearBtn)
+                clearBtn.click(function (event) {
+                    console.log("Clear");
+                    clearHistory();
+                });
         };
 
 
