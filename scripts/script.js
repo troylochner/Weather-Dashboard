@@ -38,7 +38,6 @@ $(document).ready(function () {
     var recentSearchDiv = $("#recentSearchDiv");
 
     //FUNCTION TO GRAB PREVIOUS SEARCHES FROM LOCAL STORAGE
-
     function init(){
         console.log("Run initialization")
         loadWeatherSearches();
