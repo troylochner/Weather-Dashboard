@@ -67,6 +67,7 @@ $(document).ready(function () {
       
         };
     
+        //RENDER THE SEARCH HISTORY INTO THE SIDE NAVE BAR
         function renderSearchHistory() {
             //CLEAR OUR DIV
             var recentSearchDiv = $("#recentSearchDiv");
@@ -91,6 +92,7 @@ $(document).ready(function () {
     //START BY GIVING THE WEATHER IN NY
     //getWeatherByCity('New York');
 
+    //ADD SUCCESSFULLY FOUND CITIES TO THE WEATHER SEARCH HISTORY OBJECT
     function addToHistory(cityInput){
         savedSearchCities.push(cityInput);
         localStorage.setItem("weatherSearchHistory", JSON.stringify(weatherSearches));
@@ -100,7 +102,7 @@ $(document).ready(function () {
         return;
     }
 
-    //DEFINE SOME FUNCTIONS:
+    //GET THE WEATHER BY THE CITY NAME -> RETURN THE ID FROM THIS INPUT - USE TO GET PRIMARY PARTS OF THE FORECAST
     function getWeatherByCity(cityInput) {
         //clear data
         var settings = {
@@ -112,30 +114,23 @@ $(document).ready(function () {
 
             //APPEND CITY NAME INTO SEARCH
             var currentCityHeaderEl = $('<H3>');
-            currentCityHeaderEl.text(cityInput);
-            
+            currentCityHeaderEl.text(cityInput); 
             currentCityDiv.empty();
-            currentCityDiv.append(currentCityHeaderEl);
-                
+            currentCityDiv.append(currentCityHeaderEl);         
             //ADD THE SEARCHED FOR CITY TO OUR HISTORY
-           //addToHistory(cityInput);
-                //RENDER PREVIOUS BUTTONS
-           
-                getWeatherByID(cityID);
-
-                
-
+            //addToHistory(cityInput);
+            //RENDER PREVIOUS BUTTONS
+            getWeatherByID(cityID);
             },
             error: function (ex) {
                 alert(ex.data);
             }
         };
-        $.ajax(settings).done(function (response) {
-           
-            //console.log("getWeatherByCity -> myWeather", myWeather)
+        $.ajax(settings).done(function (response) {  
         });
     };
 
+    //GET THE WEATHER BY THE CITY ID
     function getWeatherByID(cityID) {
         var settings = {
             "url": apiURL + "weather?id=" + cityID + appKey + '&units=imperial',
@@ -154,6 +149,7 @@ $(document).ready(function () {
         });
     };
 
+    //GET FORCARST USING LAT / LON
     function getForecast(lat, lon) {
         var forecast;
         var settings = {
@@ -172,10 +168,10 @@ $(document).ready(function () {
             }
         };
         $.ajax(settings).done(function (response) {
-
         });
     };
 
+    //RENDER THE CURRENT WEATHER CONDITIONS
     function renderCurrentConditions(forecast){
         currentConditionsDiv.empty();
         var cityHeader = $("<H2>");
@@ -189,8 +185,6 @@ $(document).ready(function () {
         currentUV.text("UV Index: " + forecast.current.uvi);
         currentUV.css("background-color",uvColorScale);
 
-
-        //cityHeader.text(lastSearch);
         currentTemp.text("Temperature: " + forecast.current.temp + ' F');
         currentHumid.text("Humidity: " + forecast.current.humidity + '%');
         currentWind.text("Wind Speed: " + forecast.current.wind_speed + ' MPH');
@@ -199,22 +193,19 @@ $(document).ready(function () {
         var extForecast = $("<H3>")
         extForecast.text("Extended Forecast")
         
-
         currentConditionsDiv.append(cityHeader,currentTemp,currentHumid,currentWind,currentUV,extForecast) 
     };
 
+    //PARSE THE DAILY FORCASTS
     function parseDailyForecast(forecast) {
         //CLEAR THE DECK ELEMENT
         dailyDeck.empty();
-       //var sectionLabel = $("<H3>")
-        //sectionLabel.text("Extended Forcast")
-        //dailyDeck.append(sectionLabel);
-        for (i = 0; i < 5; i++) {
-            //FOR THE FIRST FIVE DAYS IN THE FORECAST MAKE A CARD
+        for (i = 0; i < 5; i++) { //FOR THE FIRST FIVE DAYS IN THE FORECAST MAKE A CARD
             renderForecastCard(forecast.daily[i]) //RENDER FORECAST
         }    
     };
 
+    //FUNCTION TO DETERMIN UV COLOR LABELS
     function uvColor(uvRating) {
         if (uvRating > 7) {
             uvColorScale = '#ee5253'
@@ -227,35 +218,31 @@ $(document).ready(function () {
         return uvColorScale
     };
 
+    //RENDER EXTENDED FORECAST CARDS
     function renderForecastCard(x){
         var card = $("<div>").addClass("card bg-dark text-white");
-
         var cardHeader = $("<div>").addClass("card-header");
         var dateString = moment.unix(x.dt).format("MM/DD/YYYY");
         cardHeader.text(dateString);
-
         var cardBody = $("<div>").addClass("card-body bg-secondary text-light")
-        
         var iconSource = "http://openweathermap.org/img/wn/" + x.weather[0].icon + "@2x.png"
         var icon = $("<img>").css("float","right").width("64px").height("64px").addClass("img-fluid").attr("src",iconSource);
-
         var temp = $("<p>").text("Temp: " + x.temp.max + " F");
         var humidity = $("<p>").text("Humiditiy: " + x.humidity + "%");
-
-        
         card.append(cardHeader);
         cardBody.append(icon,temp,humidity);
         card.append(cardBody);
         dailyDeck.append(card);
-
     };
 
+    //ADD A CLICK TO SEARCH BY CITY NAME
     $(".cityButton").on("click", function () {
         var cityName;
         cityName = $(this).html();
         getWeatherByCity(cityName);
     });
 
+    //ONLY SELECT INPUT ON ENTER
     $("#cityInput").on("keypress", function (e) {
         if (e.which == 13) {
             event.preventDefault();
@@ -263,13 +250,10 @@ $(document).ready(function () {
             $("#cityInput").val('');
 
             getWeatherByCity(cityName);
-
             //Add to a recent items list
-            console.log(cityName)
-            return false;
+            //console.log(cityName)
+            //return false;
         }
     })
 
 }); //CLOSING FOR DOC READY
-
-
