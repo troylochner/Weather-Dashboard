@@ -29,7 +29,10 @@
          console.log("Run initialization")
          loadWeatherSearches();
          renderSearchHistory();
+
+         if (searchHistory.length> 0){
          getWeatherByCity(locLastSearch);
+         }
      };
 
      //ADD PREVIOUS CITIES TO SEARCH SIDEBAR
