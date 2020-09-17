@@ -3,11 +3,11 @@
  var apiURL = "https://api.openweathermap.org/data/2.5/";
 
  //GET OUR HISTORY FROM LOCAL STORAGE
- var locSearchHistory ;
- var searchHistory ;
- var locLastSearch ;
+ var locSearchHistory;
+ var searchHistory;
+ var locLastSearch;
 
- var cityInput ; 
+ var cityInput;
 
  //CURRENT CONDITIONS
  var currentCityDiv = $("#currentCity")
@@ -23,133 +23,100 @@
  $(document).ready(function () {
      console.log("Doc Ready")
 
-     //NOT SURE IF I NEED TO MAKE THESE DECLARATIONS HERE - BUT IT WORKS
-     //var myWeather;
-     //var myForecast;
-     //var cityID;
-     //var lat;
-     //var lon;
-     //var test;
-     //var cityInput;
 
-     //STORAGE
-
-     //DECLARE DOCUMENT ELEMENT VARIABLES RIGHT HERE
-     //var prevSearchList = $("#prevSearchList");
-     //var currentCityTempEl = $("#cityTemp");
-     //var currentCityUVEl = $("#cityUV");
-     //var currentCityWindEl = $("#cityWind");
-     //var currentCityHumidEl = $("#cityHumid");
-
-     //FUNCTION TO GRAB PREVIOUS SEARCHES FROM LOCAL STORAGE
+     //INIT FUNCTION
      function init() {
          console.log("Run initialization")
          loadWeatherSearches();
          renderSearchHistory();
+         getWeatherByCity(locLastSearch);
      };
 
      //ADD PREVIOUS CITIES TO SEARCH SIDEBAR
      function loadWeatherSearches() {
-        locSearchHistory = localStorage.getItem("SearchHistory");
-        if (locSearchHistory.length===0){
-            searchHistory = [];
-        }else{ searchHistory = JSON.parse(locSearchHistory);
-        };
-        locLastSearch = localStorage.getItem("LastSearch");
-        
+         locSearchHistory = localStorage.getItem("SearchHistory");
+         if (locSearchHistory.length === 0) {
+             searchHistory = [];
+         } else {
+             searchHistory = JSON.parse(locSearchHistory);
+         };
+         locLastSearch = localStorage.getItem("LastSearch");
+         if (locLastSearch===null){
+            locLastSearch = "London";
+         }
      };
-
-
 
      //RUN INIT
      init();
 
      //SET LAST CITY SEARCHED FOR
-     function setLastSearch(cityInput){
-        localStorage.setItem("LastSearch",cityInput);
-        locLastSearch = cityInput ;
-        console.log("locLastSearch : ", locLastSearch) 
-        setSearchHistory(cityInput);
+     function setLastSearch(cityInput) {
+         localStorage.setItem("LastSearch", cityInput);
+         locLastSearch = cityInput;
+         console.log("locLastSearch : ", locLastSearch)
+         setSearchHistory(cityInput);
      }
 
      //ADD TO FULL SEARCH HISTORY
-     function setSearchHistory(cityInput){
-        if (searchHistory===null){
-            searchHistory=[];
-            searchHistory.push(cityInput)
-        } else{searchHistory.push(cityInput)}
-        
-        //IF THE ITEM IS UNIQUE ADD IT TO OUR LOCAL STORAE
-        locSearchHistory = localStorage.setItem("SearchHistory",JSON.stringify(searchHistory));
-        console.log(searchHistory) ;
-        renderSearchHistory();
+     function setSearchHistory(cityInput) {
+         if (searchHistory === null) {
+             searchHistory = [];
+             searchHistory.push(cityInput)
+         } else {
+             searchHistory.push(cityInput)
+         }
+
+         //IF THE ITEM IS UNIQUE ADD IT TO OUR LOCAL STORAE
+         locSearchHistory = localStorage.setItem("SearchHistory", JSON.stringify(searchHistory));
+         console.log(searchHistory);
+         renderSearchHistory();
      }
 
      //SIMPLE ADD TO HISTORY
-     function addToHistory(cityInput){
+     function addToHistory(cityInput) {
          setLastSearch(cityInput);
-
-        //searchHistory = searchHistory.push(cityInput);
-        //console.log("addToHistory -> searchHistory", searchHistory)
      }
 
-     function clearHistory(){
-        localStorage.setItem("SearchHistory","");
-        init();
+     //CLEAR HISTORY
+     function clearHistory() {
+         localStorage.setItem("SearchHistory", "");
+         init();
      }
 
      //RENDER SEARCH HISTORY
      function renderSearchHistory() {
-        //DEFINE AND EMPTY THE DIV
-        var recentSearchDiv = $("#recentSearchDiv");
-        recentSearchDiv.empty();
-        
-        console.log("renderSearchHistory -> searchHistory", searchHistory)
+         //DEFINE AND EMPTY THE DIV
+         var recentSearchDiv = $("#recentSearchDiv");
+         recentSearchDiv.empty();
 
-        if (searchHistory !== null) {
-            for (i = 0; i < searchHistory.length; i++) {
-                var btn = $("<button>");
-                btn.text(searchHistory[i]);
-                btn.addClass("cityButton btn btn-block btn-light");
-                //APPEND THE BUTTON TO THE DIV
-                recentSearchDiv.append(btn);
+         console.log("renderSearchHistory -> searchHistory", searchHistory)
 
-                btn.click(function (event) {
-                    var cityInput = $(this).text();
-                    console.log("renderSearchHistory -> cityInput", cityInput)
-                    getWeatherByCity(cityInput);
-                });
-                
-            }
+         if (searchHistory !== null) {
+             for (i = 0; i < searchHistory.length; i++) {
+                 var btn = $("<button>");
+                 btn.text(searchHistory[i]);
+                 btn.addClass("cityButton btn btn-block btn-light");
+                 //APPEND THE BUTTON TO THE DIV
+                 recentSearchDiv.append(btn);
 
-            var clearBtn = $("<button>")
-                clearBtn.addClass("btn btn-block btn-dark").text("Clear History")
-                recentSearchDiv.append(clearBtn)
-                clearBtn.click(function (event) {
-                    console.log("Clear");
-                    clearHistory();
-                });
-        };
+                 btn.click(function (event) {
+                     var cityInput = $(this).text();
+                     console.log("renderSearchHistory -> cityInput", cityInput)
+                     getWeatherByCity(cityInput);
+                 });
 
+             }
 
-    }
+             var clearBtn = $("<button>")
+             clearBtn.addClass("btn btn-block btn-dark").text("Clear History")
+             recentSearchDiv.append(clearBtn)
+             clearBtn.click(function (event) {
+                 console.log("Clear");
+                 clearHistory();
+             });
+         };
+     }
 
-     /*
-
-     //ADD SUCCESSFULLY FOUND CITIES TO THE WEATHER SEARCH HISTORY OBJECT
-     function addToHistory(cityInput) {
-         weatherSearchHistory = localStorage.getItem("weatherSearchHistory");
-         var searchHistory = JSON.parse(weatherSearchHistory);
-         searchHistory.push(cityInput);
-
-         //savedSearchCities.push(cityInput);
-         localStorage.setItem("weatherSearchHistory", JSON.stringify(searchHistory));
-         //console.log("Add " + cityInput);
-         //console.log("Existing " + weatherSearchHistory);
-         renderSearchHistory();
-     }*/
-
-     //GET THE WEATHER BY THE CITY NAME -> RETURN THE ID FROM THIS INPUT - USE TO GET PRIMARY PARTS OF THE FORECAST
 
      function getWeatherByCity(cityInput) {
          //var cityID ; 
